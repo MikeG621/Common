@@ -1,0 +1,15 @@
+Idmr.Common.Graphics.dll
+
+Library file for common IDMR graphics functions
+
+Copyright (C) Michael Gaisser, 2011
+
+Instructions:
+-Add Graphics.cs to your project
+-Add System.Drawing to your references
+
+TODO:
+-stuff, maybe
+
+Code is licensed under the GNU General Pulic License (GPL) v3.0 or later
+Documentation licensed under the GNU Free Documentation License v1.3 or later
