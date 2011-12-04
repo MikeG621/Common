@@ -1,5 +1,5 @@
 /*
- * Idmr.Common.Graphics.cs, Class file for common graphics functions
+ * Idmr.Common.GraphicsFunctions.cs, Class file for common graphics functions
  * Copyright (C) 2010-2011 Michael Gaisser (mjgaisser@gmail.com)
  * 
  * This program is free software; you can redistribute it and/or modify it
@@ -32,6 +32,7 @@ using System.IO;
 
 namespace Idmr.Common
 {
+	/// <summary>Graphics functions commonly used in Idmr software</summary>
 	public class GraphicsFunctions
 	{
 		/// <summary>Returns the first palette index of the closest match to the desired color</summary>
@@ -97,6 +98,9 @@ namespace Idmr.Common
 			new8bit.Palette = palette;
 			return new8bit;
 		}
+		/// <summary>Returns an 8bppIndexed Bitmap of the given image with the given colors</summary>
+		/// <param name="image">The image to be converted</param>
+		/// <param name="colors">The array of Colors to be used</param>
 		public static Bitmap ConvertTo8bpp(Bitmap image, Color[] colors)
 		{
 			ColorPalette pal = new Bitmap(1, 1, PixelFormat.Format8bppIndexed).Palette;
@@ -134,7 +138,7 @@ namespace Idmr.Common
 		/// <summary>Wrapper for the appropriate Marshal.Copy overload</summary>
 		/// <param name="imageData">The BitmapData object for the image</param>
 		/// <param name="bytes">The byte array to be used for the pixel data</param>
-		/// <exception cref="System.ArgumentException"></exception>
+		/// <exception cref="System.ArgumentException"><i>bytes</i> is not the correct length for <i>imageData</i></exception>
 		public static void CopyImageToBytes(BitmapData imageData, byte[] bytes)
 		{
 			if (bytes.Length != imageData.Stride * imageData.Height) throw new ArgumentException("Pixel array size does not match image type", "bytes");
@@ -144,7 +148,7 @@ namespace Idmr.Common
 		/// <summary>Wrapper for the appropriate Marshal.Copy overload</summary>
 		/// <param name="imageData">The BitmapData object for the image</param>
 		/// <param name="bytes">The byte array to be used for the pixel data</param>
-		/// <exception cref="System.ArgumentException"></exception>
+		/// <exception cref="System.ArgumentException"><i>bytes</i> is not the correct length for <i>imageData</i></exception>
 		public static void CopyBytesToImage(byte[] bytes, BitmapData imageData)
 		{
 			if (bytes.Length != imageData.Stride * imageData.Height) throw new ArgumentException("Image type does not match pixel array size", "imageData");
@@ -152,35 +156,29 @@ namespace Idmr.Common
 		}
 		
 		/// <summary>Returns the BitmapData object for the given image</summary>
-		/// <param name="image">The Bitmap</param>
-		/// <returns>ReadWrite BitmapData of the entire image</returns>
+		/// <param name="image">The image</param>
 		public static BitmapData GetBitmapData(Bitmap image)
 		{
 			return image.LockBits(new Rectangle(new Point(), image.Size), ImageLockMode.ReadWrite, image.PixelFormat);
 		}
 		
+		/// <summary>Returns the array of only Colors used in an 8bppIndexed image</summary>
+		/// <param name="image">The image to parse, will be modified</param>
+		/// <exception cref="System.ArgumentException"><i>image</i> is not 8bppIndexed</exception>
+		/// <remarks><i>image</i> is parsed and all color indexes that are not used are removed. <i>image</i> is updated</remarks>
 		public static Color[] GetTrimmedColors(Bitmap image)
 		{
 			if (image.PixelFormat != PixelFormat.Format8bppIndexed) throw new ArgumentException("image must be 8bppIndexed", "image");
-			// convert to RGB, get 32bpp
-			Bitmap image32 = new Bitmap(image);
-			BitmapData bd32 = GetBitmapData(image32);
-			byte[] pixels32 = new byte[bd32.Stride * bd32.Height];
-			CopyImageToBytes(bd32, pixels32);
-			image32.UnlockBits(bd32);
 			// get 8bpp data
 			ColorPalette pal = image.Palette;
 			BitmapData bd8 = GetBitmapData(image);
 			byte[] pixels8 = new byte[bd8.Stride * bd8.Height];
 			bool[] used = new bool[256];
-			for (int y = 0; y < bd32.Height; y++)
-				for (int x = 0, pos32 = y * bd32.Stride, pos8 = y * bd8.Stride; x < bd8.Width; x++)
-				{
-					pixels8[pos8 + x] = PaletteIndex(pixels32[pos32 + x * 4 + 2], pixels32[pos32 + x * 4 + 1], pixels32[pos32 + x * 4], pal);
+			for (int y = 0; y < bd8.Height; y++)
+				for (int x = 0, pos8 = y * bd8.Stride; x < bd8.Width; x++)
 					used[pixels8[pos8 + x]] = true;
-				}
 			// removed unused palette entries
-			int count=1;
+			int count = 1;
 			for (int c = 1; c < 256; c++)
 			{
 				if (!used[c])
