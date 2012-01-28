@@ -35,6 +35,7 @@ namespace Idmr.Common
 	/// <summary>Graphics functions commonly used in Idmr software</summary>
 	public class GraphicsFunctions
 	{
+		#region PaletteIndex
 		/// <summary>Returns the first palette index of the closest match to the desired color</summary>
 		/// <param name="red">The R component of the desired color</param>
 		/// <param name="green">The G component of the desired color</param>
@@ -76,7 +77,9 @@ namespace Idmr.Common
 			}
 			return index;
 		}
+		#endregion PaletteIndex
 
+		#region ConvertTo8bpp
 		/// <summary>Returns an 8bppIndexed Bitmap of the given image with the given palette</summary>
 		/// <param name="image">The image to be converted</param>
 		/// <param name="palette">The palette to be used</param>
@@ -107,7 +110,9 @@ namespace Idmr.Common
 			for (int i = 0; i < colors.Length; i++) pal.Entries[i] = colors[i];
 			return ConvertTo8bpp(image, pal);
 		}
+		#endregion
 
+		#region ConvertTo1bpp
 		/// <summary>Returns a 1bppIndexed Bitmap of the given image with black (#000) as transparent</summary>
 		/// <param name="image">The image to be converted</param>
 		public static Bitmap ConvertTo1bpp(Bitmap image)
@@ -134,6 +139,7 @@ namespace Idmr.Common
 			new1bit.UnlockBits(bd1);
 			return new1bit;
 		}
+		#endregion
 
 		/// <summary>Wrapper for the appropriate Marshal.Copy overload</summary>
 		/// <param name="imageData">The BitmapData object for the image</param>
@@ -154,14 +160,24 @@ namespace Idmr.Common
 			if (bytes.Length != imageData.Stride * imageData.Height) throw new ArgumentException("Image type does not match pixel array size", "imageData");
 			System.Runtime.InteropServices.Marshal.Copy(bytes, 0, imageData.Scan0, bytes.Length);
 		}
-		
+
+		#region GetBitmapData
 		/// <summary>Returns the BitmapData object for the given image</summary>
 		/// <param name="image">The image</param>
 		public static BitmapData GetBitmapData(Bitmap image)
 		{
 			return image.LockBits(new Rectangle(new Point(), image.Size), ImageLockMode.ReadWrite, image.PixelFormat);
 		}
-		
+
+		/// <summary>Returns the BitmapData object for the given image with the specified PixelFormat</summary>
+		/// <param name="image">The image</param>
+		/// <param name="pixelFormat">The desired PixelFormat</param>
+		public static BitmapData GetBitmapData(Bitmap image, PixelFormat pixelFormat)
+		{
+			return image.LockBits(new Rectangle(new Point(), image.Size), ImageLockMode.ReadWrite, pixelFormat);
+		}
+		#endregion
+
 		/// <summary>Returns the array of only Colors used in an 8bppIndexed image</summary>
 		/// <param name="image">The image to parse, will be modified</param>
 		/// <exception cref="System.ArgumentException"><i>image</i> is not 8bppIndexed</exception>

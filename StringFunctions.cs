@@ -33,10 +33,14 @@ namespace Idmr.Common
 		/// <param name="withExtension">Determines if the file extension is returned with the file name</param>
 		public static string GetFileName(string filePath, bool withExtension)
 		{
-			string str = "";
-			str = filePath.Substring(filePath.LastIndexOf('\\') + 1);
+			string str = filePath.Substring(filePath.LastIndexOf('\\') + 1);
 			if (!withExtension) str = str.Remove(str.LastIndexOf('.'));
 			return str;
 		}
+		
+		/// <summary>Returns the string trimmed to the specified length limit if required</summary>
+		/// <param name="text">The original string</param>
+		/// <param name="limit">The maximum allowed length</param>
+		public static string GetTrimmed(string text, int limit) { return (text.Length > limit ? text.Substring(0, limit) : text).TrimEnd('\0'); }
 	}
 }

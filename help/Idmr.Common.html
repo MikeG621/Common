@@ -130,8 +130,10 @@
 <i>System.ArgumentException</i> - <i>bytes</i> is not the correct length for <i>imageData</i></p>
 
 <p><img src="images/static.gif"><img src="images/meth.gif"> <span><b>public</b> static</span> System.Drawing.<span>BitmapData</span> GetBitmapData(System.Drawing.<span>Bitmap</span> image)<br>
+<img src="images/static.gif"><img src="images/meth.gif"> <span><b>public</b> static</span> System.Drawing.<span>BitmapData</span> GetBitmapData(System.Drawing.<span>Bitmap</span> image, System.Drawing.<span>PixelFormat</span> pixelFormat)<br>
 <u>Returns the BitmapData object for the given image</u><br>
-<i>image</i> - The image</p>
+<i>image</i> - The image<br>
+<i>pixelFormat</i> - The desired PixelFormat</p>
 
 <p><img src="images/static.gif"><img src="images/meth.gif"> <span><b>public</b> static</span> System.Drawing.<span>Color</span>[] GetTrimmedColors(System.Drawing.<span>Bitmap</span> image)<br>
 <u>Returns the array of only Colors used in an 8bppIndexed image</u>. <i>image</i> is parsed and all color indexes that are not used are removed. <i>image</i> is updated<br>
