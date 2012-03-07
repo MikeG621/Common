@@ -1,24 +1,26 @@
 /*
  * Idmr.Common.dll, Library file with common IDMR resources
- * Copyright (C) 2009-2012 Michael Gaisser (mjgaisser@gmail.com)
+ * Copyright (C) 2007-2012 Michael Gaisser (mjgaisser@gmail.com)
  * Licensed under the GPL v3.0 or later
  * 
  * Full notice in help/Idmr.Common.html
- * Version: 1.0
+ * Version: 1.1
  */
 
 /* CHANGE LOG
  * 110914 - added (string, string, Exception) overload
  * 110922 - added _defaultMessage(string, string)
+ * 260212 - added Serialization use
+ * *** v1.1 ***
  */
 
 using System;
+using System.Runtime.Serialization;
 
 namespace Idmr.Common
 {
-    [Serializable]
-	/// <summary>Exception typically used in Idmr code for 2-dimensional areas</summary>
-	public class BoundaryException : Exception
+	/// <summary>Exception typically used in IDMR code for 2-dimensional areas</summary>
+    [Serializable] public class BoundaryException : Exception
 	{
 		static string _defaultMessage(string param, string limits) { return "Parameter '" + param + "' is not within acceptable limits (" + limits + ")"; }
 
@@ -36,7 +38,7 @@ namespace Idmr.Common
         /// <summary>Creates a new exception with a standardized error message</summary>
         /// <param name="param">The parameter that caused the exception</param>
         /// <param name="limits">Acceptable range for <i>param</i></param>
-        /// <remarks>Message is in the form "Parameter '<i>param</i>' is not within acceptable limits ('<i>limits</i>')"</remarks>
+        /// <remarks>Message is in the form <b>"Parameter '<i>param</i>' is not within acceptable limits ('<i>limits</i>')"</b></remarks>
         public BoundaryException(string param, string limits)
             : base(_defaultMessage(param, limits))
         {
@@ -52,16 +54,18 @@ namespace Idmr.Common
 		
 		/// <summary>Creates a new exception with a standardized error message</summary>
         /// <param name="param">The parameter that caused the exception</param>
-        /// <param name="limits">Acceptable range for <i>param</i></i></param>
+        /// <param name="limits">Acceptable range for <i>param</i></param>
 		/// <param name="innerEx">The initial Exception</param>
-        /// <remarks>Message is in the form "Parameter '<i>param</i>' is not within acceptable limits ('<i>limits</i>')"</remarks>
+        /// <remarks>Message is in the form <b>"Parameter '<i>param</i>' is not within acceptable limits ('<i>limits</i>')"</b></remarks>
         public BoundaryException(string param, string limits, Exception innerEx)
             : base(_defaultMessage(param, limits), innerEx)
         {
         }
 
         /// <summary>Creates a new exception using serialized data</summary>
-        protected BoundaryException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context)
+		/// <param name="info">The <see cref="SerializationInfo"/> that holds the serialized object data about the exception being thrown</param>
+		/// <param name="context">The <see cref="StreamingContext"/> that contains contextual information about the source or destination</param>
+        protected BoundaryException(SerializationInfo info, StreamingContext context)
             : base(info, context) { }
 	}
 }

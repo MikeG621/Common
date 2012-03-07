@@ -1,15 +1,17 @@
 ﻿/*
  * Idmr.Common.dll, Library file with common IDMR resources
- * Copyright (C) 2009-2012 Michael Gaisser (mjgaisser@gmail.com)
+ * Copyright (C) 2007-2012 Michael Gaisser (mjgaisser@gmail.com)
  * Licensed under the GPL v3.0 or later
  * 
  * Full notice in help/Idmr.Common.html
- * Version: 1.0
+ * Version: 1.1
  */
 
 /* CHANGELOG
  * prev - made generic
  * 300112 - moved from Idmr.Platform
+ * 120212 - T[] to List<T> conversion
+ * *** v1.1 ***
  */
  
 using System;
@@ -17,65 +19,62 @@ using System;
 namespace Idmr.Common
 {
 	/// <summary>Collection class for variable-sized arrays</summary>
+	/// <typeparam name="T">Class type to be used in the collection</typeparam>
 	public abstract class ResizableCollection<T> : FixedSizeCollection<T> where T : class
 	{
+		/// <summary>Maximum number of permitted elements</summary>
 		protected int _itemLimit;
-		protected int _itemMinimum;
 
 		/// <summary>Gets the maximum number of objects allowed in the Collection</summary>
 		public int ItemLimit { get { return _itemLimit; } }
 
 		/// <summary>Adds the given item to the end of the Collection</summary>
 		/// <param name="item">The item to be added</param>
-		/// <returns>The index of the added item if successfull, otherwise -1</returns>
+		/// <returns>The index of the added item if successfull, otherwise <b>-1</b></returns>
 		public int Add(T item) { return _add(item); }
 		
 		/// <summary>Inserts the given item at the specified index</summary>
 		/// <param name="index">Location of the item</param>
 		/// <param name="item">The item to be added</param>
-		/// <returns>The index of the added item if successfull, otherwise -1</returns>
+		/// <returns>The index of the added item if successfull, otherwise <b>-1</b></returns>
 		public int Insert(int index, T item) { return _insert(index, item); }
 		
 		/// <summary>Adds <i>item</i> to the end of the collection</summary>
-		/// <returns>Index of <i>item</i> if added, -1 if already at ItemLimit</returns>
+		/// <param name="item">The item to be added</param>
+		/// <returns>Index of <i>item</i> if added<br/>-or-<br/><b>-1</b> if <see>Count</see> equals <see cref="ItemLimit"/></returns>
 		protected int _add(T item)
 		{
-			if (_count < _itemLimit)
+			if (Count < ItemLimit)
 			{
-				T[] tempItems = _items;
-				_items = new T[_count+1];
-				for (int i=0;i<(_count);i++) _items[i] = tempItems[i];
-				_items[_count] = item;
-				_count++;
-				return (short)(_count-1);
+				_items.Add(item);
+				return (Count - 1);
 			}
 			else return -1;
 		}
 		/// <summary>Adds <i>item</i> to the specified location in the collection</summary>
-		/// <returns>Index of <i>item</i> if added, -1 if already at ItemLimit or invalid <i>index</i> value</returns>
+		/// <param name="index">Location of the item</param>
+		/// <param name="item">The item to be added</param>
+		/// <returns>Index of <i>item</i> if added<br/>-or-<br/><b>-1</b> if <see>Count</see> equals <see cref="ItemLimit"/> or invalid <i>index</i> value</returns>
 		protected int _insert(int index, T item)
 		{
-			if (_count < ItemLimit && index >= 0 && index <= _count)
+			if (Count < ItemLimit && index >= 0 && index <= Count)
 			{
-				T[] tempItems = _items;
-				_items = new T[_count+1];
-				for (int i=0;i<index;i++) _items[i] = tempItems[i];
-				_items[index] = item;
-				for (int i=index;i<_count;i++) _items[i+1] = tempItems[i];
-				_count++;
+				_items.Insert(index, item);
 				return index;
 			}
 			else return -1;
 		}
-		/// <summary>Removes the specified index. Returns the next valid <i>index</i> value</summary>
+		/// <summary>Removes the specified index</summary>
+		/// <param name="index">The item index to remove</param>
+		/// <returns>Index of the next item after deletion<br/>-or-<br/><b>-1</b> for invalid <i>index</i> value</returns>
 		protected int _removeAt(int index)
 		{
-			_count--;
-			T[] tempItems = _items;
-			_items = new T[_count];
-			for (int i=0;i<index;i++) _items[i] = tempItems[i];
-			for (int i=index;i<_count;i++) _items[i] = tempItems[i+1];
-			return (index == _count ? index-1 : index);
+			if (index >= 0 && index < Count)
+			{
+				_items.RemoveAt(index);
+				return (index == Count ? index - 1 : index);
+			}
+			else return -1;
 		}
 	}
 }

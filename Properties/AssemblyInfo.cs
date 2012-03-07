@@ -1,9 +1,10 @@
 ﻿/*
- * Idmr.Common, Class file for common IDMR functions
- * Copyright (C) 2011 Michael Gaisser (mjgaisser@gmail.com)
+ * Idmr.Common.dll, Library file with common IDMR resources
+ * Copyright (C) 2007-2012 Michael Gaisser (mjgaisser@gmail.com)
  * Licensed under the GPL v3.0 or later
  * 
- * Full notice in Graphics.cs
+ * Full notice in help/Idmr.Common.chm
+ * Version: 1.1
  */
 
 using System.Reflection;
@@ -16,7 +17,7 @@ using System.Reflection;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Imperial Department of Military Research")]
 [assembly: AssemblyProduct("Idmr.Common")]
-[assembly: AssemblyCopyright("Copyright © Michael Gaisser 2011")]
+[assembly: AssemblyCopyright("Copyright © Michael Gaisser 2007-2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

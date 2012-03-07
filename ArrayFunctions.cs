@@ -1,114 +1,176 @@
 /*
  * Idmr.Common.dll, Library file with common IDMR resources
- * Copyright (C) 2009-2012 Michael Gaisser (mjgaisser@gmail.com)
+ * Copyright (C) 2007-2012 Michael Gaisser (mjgaisser@gmail.com)
  * Licensed under the GPL v3.0 or later
  * 
  * Full notice in help/Idmr.Common.html
- * Version: 1.0
+ * Version: 1.1
  */
 
+/* CHANGELOG
+ * 100212 - added WriteToArray(short[], Array, int)
+ * 200212 - all TrimArray.fullArray changed to type Array
+ * 250212 - all WriteToArray.array changed to type Array
+ * 260212 - class is static
+ * *** v1.1 ***
+ */
 using System;
 
 namespace Idmr.Common
 {
 	/// <summary>Primarily a wrapper for Buffer.BlockCopy</summary>
-	public class ArrayFunctions
+	public static class ArrayFunctions
 	{
-		/// <summary>Retrieves the ASCII string from the byte array with the given location and length</summary>
-		/// <param name"array">The raw byte array</param>
+		/// <summary>Retrieves a string from a byte array</summary>
+		/// <param name="array">The raw byte array</param>
 		/// <param name="offset">The location of the starting character</param>
 		/// <param name="length">The number of characters to read</param>
-		/// <remarks>String is assumed to be ASCII-encoded, trims null chars</remarks>
+		/// <remarks>String is assumed to be ASCII-encoded, trims null chars.</remarks>
+		/// <exception cref="ArgumentNullException"><i>array</i> is <b>null</b></exception>
+		/// <exception cref="ArgumentOutOfRangeException"><i>offset</i> or <i>length</i> are less than zero<br/>-or-<br/><i>offset</i> or <i>length</i> result in a range outside the range of <i>array</i></exception>
+		/// <returns>An ASCII-encoded string</returns>
 		public static string ReadStringFromArray(byte[] array, int offset, int length) { return System.Text.Encoding.ASCII.GetString(array, offset, length).Trim('\0'); }
-		
+
+		#region TrimArray
 		/// <summary>Using <i>fullArray</i> starting at <i>offset</i>, fill <i>trimmedArray</i></summary>
+		/// <remarks>Is a simple wrapper for <see cref="Buffer.BlockCopy"/></remarks>
 		/// <param name="fullArray">The original array</param>
 		/// <param name="offset">The starting location in <i>fullArray</i></param>
 		/// <param name="trimmedArray">The array to fill with copied values</param>
-		public static void TrimArray(byte[] fullArray, int offset, byte[] trimmedArray)
+		/// <exception cref="ArgumentException"><i>fullArray</i> is not an array of primitives<br/>-or-<br/>The length of <i>fullArray</i> is less than <i>offset</i> plus the length of <i>trimmedArray</i></exception>
+		/// <exception cref="ArgumentNullException"><i>fullArray</i> or <i>trimmedArray</i> are <b>null</b></exception>
+		/// <exception cref="ArgumentOutOfRangeException"><i>offset</i> is less than zero</exception>
+		public static void TrimArray(Array fullArray, int offset, byte[] trimmedArray)
 		{
 			Buffer.BlockCopy(fullArray, offset, trimmedArray, 0, trimmedArray.Length);
 		}
 		/// <summary>Using <i>fullArray</i> starting at <i>offset</i>, fill <i>trimmedArray</i></summary>
+		/// <remarks>Is a simple wrapper for <see cref="Buffer.BlockCopy"/></remarks>
 		/// <param name="fullArray">The original array</param>
 		/// <param name="offset">The starting location in fullArray</param>
 		/// <param name="trimmedArray">The array to fill with copied values</param>
-		public static void TrimArray(byte[] fullArray, int offset, short[] trimmedArray)
+		/// <exception cref="ArgumentException"><i>fullArray</i> is not an array of primitives<br/>-or-<br/>The length of <i>fullArray</i> is less than <i>offset</i> plus the length of <i>trimmedArray</i></exception>
+		/// <exception cref="ArgumentNullException"><i>fullArray</i> or <i>trimmedArray</i> are <b>null</b></exception>
+		/// <exception cref="ArgumentOutOfRangeException"><i>offset</i> is less than zero</exception>
+		public static void TrimArray(Array fullArray, int offset, short[] trimmedArray)
 		{
 			Buffer.BlockCopy(fullArray, offset, trimmedArray, 0, trimmedArray.Length << 1);
 		}
 		/// <summary>Using <i>fullArray</i> starting at <i>offset</i>, fill <i>trimmedArray</i></summary>
+		/// <remarks>Is a simple wrapper for <see cref="Buffer.BlockCopy"/></remarks>
 		/// <param name="fullArray">The original array</param>
 		/// <param name="offset">The starting location in fullArray</param>
 		/// <param name="trimmedArray">The array to fill with copied values</param>
-		public static void TrimArray(short[] fullArray, int offset, short[] trimmedArray)
-		{
-			Buffer.BlockCopy(fullArray, offset, trimmedArray, 0, trimmedArray.Length << 1);
-		}
-		/// <summary>Using <i>fullArray</i> starting at <i>offset</i>, fill <i>trimmedArray</i></summary>
-		/// <param name="fullArray">The original array</param>
-		/// <param name="offset">The starting location in fullArray</param>
-		/// <param name="trimmedArray">The array to fill with copied values</param>
-		public static void TrimArray(byte[] fullArray, int offset, int[] trimmedArray)
+		/// <exception cref="ArgumentException"><i>fullArray</i> is not an array of primitives<br/>-or-<br/>The length of <i>fullArray</i> is less than <i>offset</i> plus the length of <i>trimmedArray</i></exception>
+		/// <exception cref="ArgumentNullException"><i>fullArray</i> or <i>trimmedArray</i> are <b>null</b></exception>
+		/// <exception cref="ArgumentOutOfRangeException"><i>offset</i> is less than zero</exception>
+		public static void TrimArray(Array fullArray, int offset, int[] trimmedArray)
 		{
 			Buffer.BlockCopy(fullArray, offset, trimmedArray, 0, trimmedArray.Length << 2);
 		}
-		
+		#endregion
+
+		#region WriteToArray ref
 		/// <summary>Copy <i>value</i> to the array at <i>offset</i> and increment</summary>
+		/// <remarks>Is a simple wrapper for <see cref="Buffer.BlockCopy"/></remarks>
 		/// <param name="value">The value to be copied to the array</param>
 		/// <param name="array">The array to which <i>value</i> is to be copied</param>
 		/// <param name="offset">The offset of the starting byte in the array, will be incremented 4</param>
-		public static void WriteToArray(int value, byte[] array, ref int offset)
+		/// <exception cref="ArgumentException">The length of <i>array</i> is less than <i>offset</i> plus four (4)<br/>-or-<br/><i>array</i> is not an array of primitives</exception>
+		/// <exception cref="ArgumentNullException"><i>array</i> is <b>null</b></exception>
+		/// <exception cref="ArgumentOutOfRangeException"><i>offset</i> is less than zero</exception>
+		public static void WriteToArray(int value, Array array, ref int offset)
 		{
 			Buffer.BlockCopy(BitConverter.GetBytes(value), 0, array, offset, 4);
 			offset += 4;
 		}
 		/// <summary>Copy <i>value</i> to the array at <i>offset</i> and increment</summary>
+		/// <remarks>Is a simple wrapper for <see cref="Buffer.BlockCopy"/></remarks>
 		/// <param name="value">The value to be copied to the array</param>
 		/// <param name="array">The array to which <i>value</i> is to be copied</param>
 		/// <param name="offset">The offset of the starting byte in the array, will be incremented 2</param>
-		public static void WriteToArray(short value, byte[] array, ref int offset)
+		/// <exception cref="ArgumentException">The length of <i>array</i> is less than <i>offset</i> plus two (2)<br/>-or-<br/><i>array</i> is not an array of primitives</exception>
+		/// <exception cref="ArgumentNullException"><i>array</i> is <b>null</b></exception>
+		/// <exception cref="ArgumentOutOfRangeException"><i>offset</i> is less than zero</exception>
+		public static void WriteToArray(short value, Array array, ref int offset)
 		{
 			Buffer.BlockCopy(BitConverter.GetBytes(value), 0, array, offset, 2);
 			offset += 2;
 		}
 		/// <summary>Copy <i>value</i> to the array at <i>offset</i> and increment</summary>
+		/// <remarks>Is a simple wrapper for <see cref="Buffer.BlockCopy"/></remarks>
 		/// <param name="value">The value to be copied to the array</param>
 		/// <param name="array">The array to which <i>value</i> is to be copied</param>
 		/// <param name="offset">The offset of the starting byte in the array, will be incremented the length of the string</param>
-		public static void WriteToArray(string value, byte[] array, ref int offset)
+		/// <exception cref="ArgumentException">The length of <i>array</i> is less than <i>offset</i> plus the length of <i>value</i><br/>-or-<br/><i>array</i> is not an array of primitives</exception>
+		/// <exception cref="ArgumentNullException"><i>array</i> is <b>null</b></exception>
+		/// <exception cref="ArgumentOutOfRangeException"><i>offset</i> is less than zero</exception>
+		public static void WriteToArray(string value, Array array, ref int offset)
 		{
 			Buffer.BlockCopy(System.Text.Encoding.ASCII.GetBytes(value), 0, array, offset, value.Length);
 			offset += value.Length;
 		}
 		/// <summary>Copy <i>value</i> to the array at <i>offset</i> and increment</summary>
+		/// <remarks>Is a simple wrapper for <see cref="Buffer.BlockCopy"/></remarks>
 		/// <param name="value">The value to be copied to the array, will copy entire array</param>
 		/// <param name="array">The array to which <i>value</i> is to be copied</param>
 		/// <param name="offset">The offset of the starting byte in the array, will be incremented the length of <i>value</i></param>
-		public static void WriteToArray(byte[] value,  byte[] array, ref int offset)
+		/// <exception cref="ArgumentException">The length of <i>array</i> is less than <i>offset</i> plus the length of <i>value</i><br/>-or-<br/><i>array</i> is not an array of primitives</exception>
+		/// <exception cref="ArgumentNullException"><i>array</i> or <i>value</i> are <b>null</b></exception>
+		/// <exception cref="ArgumentOutOfRangeException"><i>offset</i> is less than zero</exception>
+		public static void WriteToArray(byte[] value,  Array array, ref int offset)
 		{
 			Buffer.BlockCopy(value, 0, array, offset, value.Length);
 			offset += value.Length;
 		}
-		/// <summary>Copy value to the array at offset</summary>
+		#endregion
+		
+		#region WriteToArray
+		/// <summary>Copy <i>value</i> to the array at <i>offset</i></summary>
+		/// <remarks>Is a simple wrapper for <see cref="Buffer.BlockCopy"/></remarks>
 		/// <param name="value">The value to be copied to the array</param>
 		/// <param name="array">The array to which <i>value</i> is to be copied</param>
 		/// <param name="offset">The offset of the starting byte in the array</param>
-		public static void WriteToArray(int value, byte[] array, int offset) { Buffer.BlockCopy(BitConverter.GetBytes(value), 0, array, offset, 4); }
-		/// <summary>Copy value to the array at offset</summary>
+		/// <exception cref="ArgumentException">The length of <i>array</i> is less than <i>offset</i> plus four (4)<br/>-or-<br/><i>array</i> is not an array of primitives</exception>
+		/// <exception cref="ArgumentNullException"><i>array</i> is <b>null</b></exception>
+		/// <exception cref="ArgumentOutOfRangeException"><i>offset</i> is less than zero</exception>
+		public static void WriteToArray(int value, Array array, int offset) { Buffer.BlockCopy(BitConverter.GetBytes(value), 0, array, offset, 4); }
+		/// <summary>Copy <i>value</i> to the array at <i>offset</i></summary>
+		/// <remarks>Is a simple wrapper for <see cref="Buffer.BlockCopy"/></remarks>
 		/// <param name="value">The value to be copied to the array</param>
 		/// <param name="array">The array to which <i>value</i> is to be copied</param>
 		/// <param name="offset">The offset of the starting byte in the array</param>
-		public static void WriteToArray(short value, byte[] array, int offset) { Buffer.BlockCopy(BitConverter.GetBytes(value), 0, array, offset, 2); }
-		/// <summary>Copy value to the array at offset</summary>
+		/// <exception cref="ArgumentException">The length of <i>array</i> is less than <i>offset</i> plus two (2)<br/>-or-<br/><i>array</i> is not an array of primitives</exception>
+		/// <exception cref="ArgumentNullException"><i>array</i> is <b>null</b></exception>
+		/// <exception cref="ArgumentOutOfRangeException"><i>offset</i> is less than zero</exception>
+		public static void WriteToArray(short value, Array array, int offset) { Buffer.BlockCopy(BitConverter.GetBytes(value), 0, array, offset, 2); }
+		/// <summary>Copy <i>value</i> to the array at <i>offset</i></summary>
+		/// <remarks>Is a simple wrapper for <see cref="Buffer.BlockCopy"/></remarks>
 		/// <param name="value">The value to be copied to the array</param>
 		/// <param name="array">The array to which <i>value</i> is to be copied</param>
 		/// <param name="offset">The offset of the starting byte in the array</param>
-		public static void WriteToArray(string value, byte[] array, int offset) { Buffer.BlockCopy(System.Text.Encoding.ASCII.GetBytes(value), 0, array, offset, value.Length); }
-		/// <summary>Copy value to the array at offset</summary>
+		/// <exception cref="ArgumentException">The length of <i>array</i> is less than <i>offset</i> plus the length of <i>value</i><br/>-or-<br/><i>array</i> is not an array of primitives</exception>
+		/// <exception cref="ArgumentNullException"><i>array</i> is <b>null</b></exception>
+		/// <exception cref="ArgumentOutOfRangeException"><i>offset</i> is less than zero</exception>
+		public static void WriteToArray(string value, Array array, int offset) { Buffer.BlockCopy(System.Text.Encoding.ASCII.GetBytes(value), 0, array, offset, value.Length); }
+		/// <summary>Copy <i>value</i> to the array at <i>offset</i></summary>
+		/// <remarks>Is a simple wrapper for <see cref="Buffer.BlockCopy"/></remarks>
 		/// <param name="value">The value to be copied to the array, will copy entire array</param>
 		/// <param name="array">The array to which <i>value</i> is to be copied</param>
 		/// <param name="offset">The offset of the starting byte in the array</param>
-		public static void WriteToArray(byte[] value, byte[] array, int offset) { Buffer.BlockCopy(value, 0, array, offset, value.Length); }
+		/// <exception cref="ArgumentException">The length of <i>array</i> is less than <i>offset</i> plus the length of <i>value</i><br/>-or-<br/><i>array</i> is not an array of primitives</exception>
+		/// <exception cref="ArgumentNullException"><i>array</i> or <i>value</i> are <b>null</b></exception>
+		/// <exception cref="ArgumentOutOfRangeException"><i>offset</i> is less than zero</exception>
+		public static void WriteToArray(byte[] value, Array array, int offset) { Buffer.BlockCopy(value, 0, array, offset, value.Length); }
+		/// <summary>Copy <i>value</i> to the array at <i>offset</i></summary>
+		/// <remarks>Is a simple wrapper for <see cref="Buffer.BlockCopy"/></remarks>
+		/// <param name="value">The value to be copied to the array, will copy entire array</param>
+		/// <param name="array">The array to which <i>value</i> is to be copied</param>
+		/// <param name="offset">The offset of the starting byte in the array</param>
+		/// <exception cref="ArgumentException">The length of <i>array</i> is less than <i>offset</i> plus the length of <i>value</i><br/>-or-<br/><i>array</i> is not an array of primitives</exception>
+		/// <exception cref="ArgumentNullException"><i>array</i> or <i>value</i> are <b>null</b></exception>
+		/// <exception cref="ArgumentOutOfRangeException"><i>offset</i> is less than zero</exception>
+		public static void WriteToArray(short[] value, Array array, int offset) { Buffer.BlockCopy(value, 0, array, offset, value.Length << 1); }
+		#endregion
 	}
 }
