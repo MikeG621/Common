@@ -12,6 +12,8 @@
  * 300112 - moved from Idmr.Platform
  * 120212 - T[] to List<T> conversion, implemented IEnumerable<T>
  * *** v1.1 ***
+ * 120405 - null check in Count
+ * 120510 - _setItem correctly used Count instead of Capacity
  */
 
 using System;
@@ -29,6 +31,7 @@ namespace Idmr.Common
 		/// <summary>Gets or sets a single item within the Collection</summary>
 		/// <param name="index">The item location within the collection</param>
 		/// <returns>A single item within the collection<br/>-or-<br/><b>null</b> for invalid values of <i>index</i></returns>
+		/// <remarks>No action is taken when attempting to set with invalid values of <i>index</i>.</remarks>
 		public T this[int index]
 		{
 			get { return _getItem(index); }
@@ -36,8 +39,8 @@ namespace Idmr.Common
 		}
 
 		/// <summary>Gets the number of objects in the collection</summary>
-		/// <remarks>May not necessarily be the size of the internal array</remarks>
-		public int Count { get { return _items.Count; } }
+		/// <remarks>If internal List is <b>null</b>, returns <b>-1</b></remarks>
+		public int Count { get { return (_items == null ? -1 : _items.Count); } }
 
 		/// <summary>Gets the item at the specified index</summary>
 		/// <param name="index">The item location within the collection</param>
@@ -53,7 +56,7 @@ namespace Idmr.Common
 		/// <param name="item">The new item</param>
 		protected void _setItem(int index, T item)
 		{
-			if (index >= 0 && index < _items.Capacity) _items[index] = item;
+			if (index >= 0 && index < Count) _items[index] = item;
 		}
 
 		#region IEnumerable<T> Members

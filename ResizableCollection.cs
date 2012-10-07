@@ -12,6 +12,7 @@
  * 300112 - moved from Idmr.Platform
  * 120212 - T[] to List<T> conversion
  * *** v1.1 ***
+ * 120405 - null check in _add
  */
  
 using System;
@@ -41,11 +42,13 @@ namespace Idmr.Common
 		
 		/// <summary>Adds <i>item</i> to the end of the collection</summary>
 		/// <param name="item">The item to be added</param>
-		/// <returns>Index of <i>item</i> if added<br/>-or-<br/><b>-1</b> if <see>Count</see> equals <see cref="ItemLimit"/></returns>
+		/// <returns>Index of <i>item</i> if added<br/><b>-or-</b><br/><b>-1</b> if <see>Count</see> equals <see cref="ItemLimit"/></returns>
+		/// <remarks>If the internal List has not been initialized, will initialize with a Capacity of <b>1</b></remarks>
 		protected int _add(T item)
 		{
 			if (Count < ItemLimit)
 			{
+				if (_items == null) _items = new System.Collections.Generic.List<T>(1);
 				_items.Add(item);
 				return (Count - 1);
 			}
@@ -54,7 +57,7 @@ namespace Idmr.Common
 		/// <summary>Adds <i>item</i> to the specified location in the collection</summary>
 		/// <param name="index">Location of the item</param>
 		/// <param name="item">The item to be added</param>
-		/// <returns>Index of <i>item</i> if added<br/>-or-<br/><b>-1</b> if <see>Count</see> equals <see cref="ItemLimit"/> or invalid <i>index</i> value</returns>
+		/// <returns>Index of <i>item</i> if added<br/><b>-or-</b><br/><b>-1</b> if <see cref="Count"/> equals <see cref="ItemLimit"/> or invalid <i>index</i> value</returns>
 		protected int _insert(int index, T item)
 		{
 			if (Count < ItemLimit && index >= 0 && index <= Count)
@@ -66,7 +69,7 @@ namespace Idmr.Common
 		}
 		/// <summary>Removes the specified index</summary>
 		/// <param name="index">The item index to remove</param>
-		/// <returns>Index of the next item after deletion<br/>-or-<br/><b>-1</b> for invalid <i>index</i> value</returns>
+		/// <returns>Index of the next item after deletion<br/><b>-or-</b><br/><b>-1</b> for invalid <i>index</i> value</returns>
 		protected int _removeAt(int index)
 		{
 			if (index >= 0 && index < Count)

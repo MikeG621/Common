@@ -8,11 +8,14 @@
  */
 
 /* CHANGELOG
- * 260212 - class is static, added GetTrimmed(string)
+ * [NEW] MatchesWildcard()
+ * [UPD] class is static
+ * [NEW] GetTrimmed(string)
  * *** v1.1 ***
  */
 
 using System;
+using System.Text.RegularExpressions;
 
 namespace Idmr.Common
 {
@@ -43,5 +46,32 @@ namespace Idmr.Common
 		/// <param name="text">The original string</param>
 		/// <returns><i>text</i> without trailing null chars</returns>
 		public static string GetTrimmed(string text) { return text.TrimEnd('\0'); }
+		
+		/// <summary>Indicates whether the specified text matches the specified wildcard string.</summary>
+		/// <param name="text">The full text to search</param>
+		/// <param name="wildcard">The wildcard string using "*" and "?"</param>
+		/// <exception cref="ArgumentNullException"><i>text</i> or <i>wildcard</i> are <b>null</b></exception>
+		/// <returns><b>true</b> if the strings match</returns>
+		/// <remarks>Case-insensitive</remarks>
+		public static bool MatchesWildcard(string text, string wildcard)
+		{
+			return MatchesWildcard(text, wildcard, false);
+		}
+		/// <summary>Indicates whether the specified text matches the specified wildcard string.</summary>
+		/// <param name="text">The full text to search</param>
+		/// <param name="wildcard">The wildcard string using "*" and "?"</param>
+		/// <param name="caseSensitive">Controls if <i>text</i> and <i>wildcard</i> are both treated as case-sensitive</param>
+		/// <exception cref="ArgumentNullException"><i>text</i> or <i>wildcard</i> are <b>null</b></exception>
+		/// <returns><b>true</b> if the strings match</returns>
+		public static bool MatchesWildcard(string text, string wildcard, bool caseSensitive)
+		{
+			string regex = "^" + Regex.Escape(wildcard).Replace("\\*", ".*").Replace("\\?", ".") + "$";
+			if (!caseSensitive)
+			{
+				regex = regex.ToLower();
+				text = text.ToLower();
+			}
+			return Regex.IsMatch(text, regex);
+		}
 	}
 }
