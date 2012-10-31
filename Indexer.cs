@@ -4,11 +4,12 @@
  * Licensed under the GPL v3.0 or later
  * 
  * Full notice in help/Idmr.Common.chm
- * Version: 1.1
+ * Version: 1.2
  */
 
 /* CHANGELOG
- * *** v1.1 ***
+ * v1.0, XXXXXX
+ * - Release
  */
 
 using System;

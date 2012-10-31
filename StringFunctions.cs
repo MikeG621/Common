@@ -4,14 +4,16 @@
  * Licensed under the GPL v3.0 or later
  * 
  * Full notice in help/Idmr.Common.chm
- * Version: 1.1
+ * Version: 1.2
  */
 
 /* CHANGELOG
- * [NEW] MatchesWildcard()
- * [UPD] class is static
+ * v1.1, XXXXXX
+ * [NEW] MatchesWildcard
  * [NEW] GetTrimmed(string)
- * *** v1.1 ***
+ * [UPD] class is static
+ * v1.0, XXXXXX
+ * - Release
  */
 
 using System;

@@ -1,12 +1,40 @@
 Idmr.Common.dll
+========================
 
-Provides types used throughout IDMR software
+Author: Michael Gaisser (mjgaisser@gmail.com)
+Version: 1.2
+Date: 2012.10.24
+
+Library providing types used throughout IDMR software
+
+==========
+Version History
+
+v1.2 - 24 Oct 2012
+ - (ArrayFunctions) added WriteToArray(short[], Array, ref int) overload
+ - (FixedSizeCollection) Fixed a bug checking against Capactiy instead of Count
+ - (GraphicsFunctions) ConvertTo8bpp{Bitmap, Color[]) can now function when given a null array
+ - (ResizableCollection) Unrestricted ItemLimit now allowed
+
+==========
+Additional Information
+
+Instructions:
+ - Add System.Drawing to your references
+
+Programmer's reference can be found in help/Idmr.Common.chm
+
+==========
+Copyright Information
 
 Copyright (C) Michael Gaisser, 2007-2012
 
-Instructions:
--Add all *.cs files to your project
--Add System.Drawing to your references
+This library file and related files are licensed under the GNU Public License
+or GNU Free Documentation License.  See GPL.txt or FDL.txt as appropriate.
 
-Code is licensed under the GNU General Pulic License (GPL) v3.0 or later
-Documentation licensed under the GNU Free Documentation License v1.3 or later
+"Star Wars" and related items are trademarks of LucasFilm Ltd and
+LucasArts Entertainment Co.
+
+THESE FILES HAVE BEEN TESTED AND DECLARED FUNCTIONAL, AS SUCH THE AUTHOR CANNOT
+BE HELD RESPONSIBLE OR LIABLE FOR UNWANTED EFFECTS DUE ITS USE OR MISUSE. THIS
+SOFTWARE IS OFFERED AS-IS WITHOUT WARRANTY OF ANY KIND.

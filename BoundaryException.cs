@@ -4,14 +4,16 @@
  * Licensed under the GPL v3.0 or later
  * 
  * Full notice in help/Idmr.Common.chm
- * Version: 1.1
+ * Version: 1.2
  */
 
 /* CHANGE LOG
- * 110914 - added (string, string, Exception) overload
- * 110922 - added _defaultMessage(string, string)
- * 260212 - added Serialization use
- * *** v1.1 ***
+ * v1.1, XXXXXX
+ * [NEW] ctr(string, string, Exception)
+ * [NEW] _defaultMessage(string, string)
+ * [NEW] Serialization use
+ * v1.0, XXXXXX
+ * - Release
  */
 
 using System;

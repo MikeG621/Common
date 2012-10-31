@@ -4,16 +4,21 @@
  * Licensed under the GPL v3.0 or later
  * 
  * Full notice in help/Idmr.Common.chm
- * Version: 1.1
+ * Version: 1.2
  */
  
 /* CHANGE LOG
- * 040811 - ConvertTo1bpp(Bitmap, Color) - apparently hadn't implemented transparent yet...
- * 150811 - Added GetBitmapData
- * 270811 - added array size validation to Copy*To*, added PaletteIndex(,Color[]) overloads
- * 290112 - added GetBitmapData(Bitmap, PixelFormat)
- * 260212 - in ConvertTo1bpp added pix32 check for 0 Alpha, class is static
- * *** v1.1 ***
+ * v1.2, 121024
+ * [FIX] ConvertTo8bpp{Bitmap, Color[]) now handles null array
+ * v1.1, XXXXXX
+ * [FIX] ConvertTo1bpp(Bitmap, Color) now implements transparent
+ * [NEW] GetBitmapData
+ * [NEW] PaletteIndex(*, Color[])
+ * [UPD] added array size validation to Copy*To*
+ * [UPD] ConvertTo1bpp pix32 checks for 0 Alpha
+ * [UPD] class is static
+ * v1.0, XXXXXX
+ * - Release
  */
 
 using System;
@@ -103,10 +108,11 @@ namespace Idmr.Common
 		/// <param name="image">The image to be converted</param>
 		/// <param name="colors">The array of Colors to be used</param>
 		/// <returns>A Bitmap with PixelFormat.Format8bppIndexer</returns>
+		/// <remarks>If <i>colors</i> is <b>null</b>, converts using the default 256-color palette</remarks>
 		public static Bitmap ConvertTo8bpp(Bitmap image, Color[] colors)
 		{
 			ColorPalette pal = new Bitmap(1, 1, PixelFormat.Format8bppIndexed).Palette;
-			for (int i = 0; i < colors.Length; i++) pal.Entries[i] = colors[i];
+			if (colors != null) for (int i = 0; i < colors.Length; i++) pal.Entries[i] = colors[i];
 			return ConvertTo8bpp(image, pal);
 		}
 		#endregion
@@ -144,7 +150,7 @@ namespace Idmr.Common
 		#endregion
 
 		/// <summary>Gets the raw byte data from an image</summary>
-		/// <remarks>Wrapper for the appropriate <see cref="System.Runtime.InteropServices.Mashal.Copy">Marshal.Copy</see> overload. <i>bytes</i> and <i>imageData</i> must be sized for the same image type and dimensions</remarks>
+		/// <remarks>Wrapper for the appropriate <see cref="System.Runtime.InteropServices.Marshal.Copy(IntPtr, byte[], int, int)">Marshal.Copy</see> overload. <i>bytes</i> and <i>imageData</i> must be sized for the same image type and dimensions</remarks>
 		/// <param name="imageData">The BitmapData object for the image</param>
 		/// <param name="bytes">The byte array to be used for the pixel data</param>
 		/// <exception cref="System.ArgumentException"><i>bytes</i> is not the correct length for <i>imageData</i></exception>
@@ -155,7 +161,7 @@ namespace Idmr.Common
 		}
 
 		/// <summary>Overwrite the image with raw byte data</summary>
-		/// <remarks>Wrapper for the appropriate <see cref="System.Runtime.InteropServices.Mashal.Copy">Marshal.Copy</see> overload. <i>bytes</i> and <i>imageData</i> must be sized for the same image type and dimensions</remarks>
+		/// <remarks>Wrapper for the appropriate <see cref="System.Runtime.InteropServices.Marshal.Copy(byte[], int, IntPtr, int)">Marshal.Copy</see> overload. <i>bytes</i> and <i>imageData</i> must be sized for the same image type and dimensions</remarks>
 		/// <param name="imageData">The BitmapData object for the image</param>
 		/// <param name="bytes">The byte array to be used for the pixel data</param>
 		/// <exception cref="System.ArgumentException"><i>bytes</i> is not the correct length for <i>imageData</i></exception>
@@ -167,7 +173,7 @@ namespace Idmr.Common
 
 		#region GetBitmapData
 		/// <summary>Gets the BitmapData object for the given image</summary>
-		/// <remarks>Wrapper for the appropriate <see cref="System.Drawing.Bitmap.Lockbits">Bitmap.LockBits</see> overload</remarks>
+		/// <remarks>Wrapper for the appropriate <see cref="System.Drawing.Bitmap.LockBits(Rectangle, ImageLockMode, PixelFormat)">Bitmap.LockBits</see> overload</remarks>
 		/// <param name="image">The image</param>
 		/// <returns>The BitmapData object using the PixelFormat of <i>image</i></returns>
 		public static BitmapData GetBitmapData(Bitmap image)
@@ -176,7 +182,7 @@ namespace Idmr.Common
 		}
 
 		/// <summary>Gets the BitmapData object for the given image with the specified PixelFormat</summary>
-		/// <remarks>Wrapper for the appropriate <see cref="System.Drawing.Bitmap.Lockbits">Bitmap.LockBits</see> overload</remarks>
+		/// <remarks>Wrapper for the appropriate <see cref="System.Drawing.Bitmap.LockBits(Rectangle, ImageLockMode, PixelFormat)">Bitmap.LockBits</see> overload</remarks>
 		/// <param name="image">The image</param>
 		/// <param name="pixelFormat">The desired PixelFormat</param>
 		/// <returns>The BitmapDataobject using the given PixelFormat</returns>

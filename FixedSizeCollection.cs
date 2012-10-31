@@ -4,16 +4,19 @@
  * Licensed under the GPL v3.0 or later
  * 
  * Full notice in help/Idmr.Common.chm
- * Version: 1.1
+ * Version: 1.2
  */
 
 /* CHANGELOG
- * prev - made generic
- * 300112 - moved from Idmr.Platform
- * 120212 - T[] to List<T> conversion, implemented IEnumerable<T>
- * *** v1.1 ***
- * 120405 - null check in Count
- * 120510 - _setItem correctly used Count instead of Capacity
+ * v1.2, 121024
+ * [UPD] null check in Count
+ * [FIX] _setItem correctly uses Count instead of Capacity
+ * v1.1, XXXXXX
+ * [UPD] moved from Idmr.Platform
+ * [UPD] T[] converted to List<T>
+ * [NEW] IEnumerable<T> implementation
+ * v1.0, XXXXXX
+ * - Release
  */
 
 using System;

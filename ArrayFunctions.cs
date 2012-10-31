@@ -4,16 +4,19 @@
  * Licensed under the GPL v3.0 or later
  * 
  * Full notice in help/Idmr.Common.chm
- * Version: 1.1
+ * Version: 1.2
  */
 
 /* CHANGELOG
- * 120210 - added WriteToArray(short[], Array, int)
- * 120220 - all TrimArray.fullArray changed to type Array
- * 120225 - all WriteToArray.array changed to type Array
- * 120226 - class is static
- * *** v1.1 ***
- * 120411 - added WriteToArray(short[], Array, ref int)
+ * v1.2, 121024
+ * [NEW] WriteToArray(short[], Array, ref int)
+ * v1.1, XXXXXX
+ * [NEW] WriteToArray(short[], Array, int)
+ * [UPD] TrimArray.fullArray converted to Array type
+ * [UPD] WriteToArray.array converted to Array type
+ * [UPD] class is static
+ * v1.0, XXXXXX
+ * - Release
  */
 using System;
 

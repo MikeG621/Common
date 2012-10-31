@@ -4,7 +4,7 @@
  * Licensed under the GPL v3.0 or later
  * 
  * Full notice in ../help/Idmr.Common.chm
- * Version: 1.1
+ * Version: 1.2
  */
 
 using System.Reflection;
@@ -28,4 +28,4 @@ using System.Reflection;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("1.1.*")]
+[assembly: AssemblyVersion("1.2.0.*")]
