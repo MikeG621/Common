@@ -8,6 +8,10 @@
  */
 
 /* CHANGELOG
+ * v1.3, XXXXXX
+ * [NEW] Capacity, abstract SetCount(int, bool), abstract Clear()
+ * [NEW] IsModified implementation
+ * [UPD] Add() and Insert() now virtual
  * v1.2, 121024
  * [UPD] ItemLimit value of -1 for unlimited size
  * [UPD] null check in _add
@@ -34,16 +38,30 @@ namespace Idmr.Common
 		/// <remarks>A value of <b>-1</b> means unlimited</remarks>
 		public int ItemLimit { get { return _itemLimit; } }
 
+		/// <summary>Gets the current size of the Collection</summary>
+		/// <remarks>This is primarily for use when <see cref="ItemLimit"/> is set <b>-1</b> (unlimited).</remarks>
+		public int Capacity { get { return _items.Capacity; } }
+
+		abstract public void SetCount(int value, bool allowTruncate);
+
+		/// <summary>Empties the Collection of entries</summary>
+		/// <remarks>All existing items are lost, <see cref="Idmr.Common.FixedSizeCollection{T}.Count"/> is set to <b>zero</b></remarks>
+		public virtual void Clear()
+		{
+			_items.Clear();
+			_isModified = true;
+		}
+		
 		/// <summary>Adds the given item to the end of the Collection</summary>
 		/// <param name="item">The item to be added</param>
 		/// <returns>The index of the added item if successfull, otherwise <b>-1</b></returns>
-		public int Add(T item) { return _add(item); }
+		public virtual int Add(T item) { return _add(item); }
 		
 		/// <summary>Inserts the given item at the specified index</summary>
 		/// <param name="index">Location of the item</param>
 		/// <param name="item">The item to be added</param>
 		/// <returns>The index of the added item if successfull, otherwise <b>-1</b></returns>
-		public int Insert(int index, T item) { return _insert(index, item); }
+		public virtual int Insert(int index, T item) { return _insert(index, item); }
 		
 		/// <summary>Adds <i>item</i> to the end of the collection</summary>
 		/// <param name="item">The item to be added</param>
@@ -55,6 +73,7 @@ namespace Idmr.Common
 			{
 				if (_items == null) _items = new System.Collections.Generic.List<T>(1);
 				_items.Add(item);
+				if (!_isLoading) _isModified = true;
 				return (Count - 1);
 			}
 			else return -1;
@@ -68,6 +87,7 @@ namespace Idmr.Common
 			if ((ItemLimit == -1 || Count < ItemLimit) && index >= 0 && index <= Count)
 			{
 				_items.Insert(index, item);
+				if (!_isLoading) _isModified = true;
 				return index;
 			}
 			else return -1;
@@ -80,6 +100,7 @@ namespace Idmr.Common
 			if (index >= 0 && index < Count)
 			{
 				_items.RemoveAt(index);
+				if (!_isLoading) _isModified = true;
 				return (index == Count ? index - 1 : index);
 			}
 			else return -1;

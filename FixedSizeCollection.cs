@@ -8,6 +8,8 @@
  */
 
 /* CHANGELOG
+ * v1.3, XXXXXX
+ * [NEW] IsModified, _isModified, _isLoading, Tag, _tag
  * v1.2, 121024
  * [UPD] null check in Count
  * [FIX] _setItem correctly uses Count instead of Capacity
@@ -28,8 +30,25 @@ namespace Idmr.Common
 	/// <typeparam name="T">Class type to be used in the collection</typeparam>
 	public abstract class FixedSizeCollection<T> : IEnumerable<T> where T : class
 	{
+		/// <summary>Flag indicating that changed have been made since initialization</summary>
+		protected bool _isModified;
+		/// <summary>Flag indicating that the initialization process is active, preventing changes to <see cref="_isModified"/></summary>
+		protected bool _isLoading;
 		/// <summary>The collection contents</summary>
 		protected List<T> _items;
+		/// <summary>User-specified content</summary>
+		protected object _tag;
+		
+		/// <summary>Gets or sets user-specified content</summary>
+		public virtual object Tag
+		{
+			get { return _tag; }
+			set
+			{
+				_tag = value;
+				if (!_isLoading) _isModified = true;
+			}
+		}
 
 		/// <summary>Gets or sets a single item within the Collection</summary>
 		/// <param name="index">The item location within the collection</param>
@@ -44,6 +63,9 @@ namespace Idmr.Common
 		/// <summary>Gets the number of objects in the collection</summary>
 		/// <remarks>If internal List is <b>null</b>, returns <b>-1</b></remarks>
 		public int Count { get { return (_items == null ? -1 : _items.Count); } }
+		
+		/// <summary>Gets whether or not changes have been made to the Collection since intialization</summary>
+		public virtual bool IsModified { get { return _isModified; } }
 
 		/// <summary>Gets the item at the specified index</summary>
 		/// <param name="index">The item location within the collection</param>
@@ -60,6 +82,7 @@ namespace Idmr.Common
 		protected void _setItem(int index, T item)
 		{
 			if (index >= 0 && index < Count) _items[index] = item;
+			if (!_isLoading) _isModified = true;
 		}
 
 		#region IEnumerable<T> Members
