@@ -1,14 +1,14 @@
 ﻿/*
  * Idmr.Common.dll, Library file with common IDMR resources
- * Copyright (C) 2007-2013 Michael Gaisser (mjgaisser@gmail.com)
- * Licensed under the GPL v3.0 or later
+ * Copyright (C) 2007-2014 Michael Gaisser (mjgaisser@gmail.com)
+ * Licensed under the MPL v2.0 or later
  * 
  * Full notice in help/Idmr.Common.chm
- * Version: 1.2
+ * Version: 1.3
  */
 
 /* CHANGE LOG
- * v1.3, XXXXXX
+ * v1.3, 141214
  * - Release
  */
 

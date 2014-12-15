@@ -1,13 +1,15 @@
 /*
  * Idmr.Common.dll, Library file with common IDMR resources
- * Copyright (C) 2007-2012 Michael Gaisser (mjgaisser@gmail.com)
- * Licensed under the GPL v3.0 or later
+ * Copyright (C) 2007-2014 Michael Gaisser (mjgaisser@gmail.com)
+ * Licensed under the MPL v2.0 or later
  * 
  * Full notice in help/Idmr.Common.chm
- * Version: 1.2
+ * Version: 1.3
  */
- 
+
 /* CHANGE LOG
+ * v1.3, 141214
+ * [UPD] switch to MPL
  * v1.2, 121024
  * [FIX] ConvertTo8bpp{Bitmap, Color[]) now handles null array
  * v1.1, XXXXXX
@@ -28,43 +30,43 @@ using System.IO;
 
 namespace Idmr.Common
 {
-	/// <summary>Graphics functions commonly used in Idmr software</summary>
+	/// <summary>Graphics functions commonly used in Idmr software.</summary>
 	public static class GraphicsFunctions
 	{
 		#region PaletteIndex
-		/// <summary>Gets the first palette index of the closest match to the desired color</summary>
-		/// <param name="red">The R component of the desired color</param>
-		/// <param name="green">The G component of the desired color</param>
-		/// <param name="blue">The B component of the desired color</param>
-		/// <param name="palette">The Palette being used</param>
-		/// <returns>The index of the color closest to search parameters</returns>
+		/// <summary>Gets the first palette index of the closest match to the desired color.</summary>
+		/// <param name="red">The R component of the desired color.</param>
+		/// <param name="green">The G component of the desired color.</param>
+		/// <param name="blue">The B component of the desired color.</param>
+		/// <param name="palette">The Palette being used.</param>
+		/// <returns>The index of the color closest to search parameters.</returns>
 		public static byte PaletteIndex(byte red, byte green, byte blue, ColorPalette palette)
 		{
 			return PaletteIndex(Color.FromArgb(red, green, blue), palette.Entries);
 		}
-		/// <summary>Gets the first palette index of the closest match to the desired color</summary>
-		/// <param name="color">The desired color</param>
-		/// <param name="palette">The Palette being used</param>
-		/// <returns>The index of the color closest to search parameters</returns>
+		/// <summary>Gets the first palette index of the closest match to the desired color.</summary>
+		/// <param name="color">The desired color.</param>
+		/// <param name="palette">The Palette being used.</param>
+		/// <returns>The index of the color closest to search parameters.</returns>
 		public static byte PaletteIndex(Color color, ColorPalette palette)
 		{
 			return PaletteIndex(color, palette.Entries);
 		}
-		/// <summary>Gets the first palette index of the closest match to the desired color</summary>
-		/// <param name="red">The R component of the desired color</param>
-		/// <param name="green">The R component of the desired color</param>
-		/// <param name="blue">The R component of the desired color</param>
-		/// <param name="colors">The Color array being used</param>
-		/// <returns>The index of the color closest to search parameters</returns>
+		/// <summary>Gets the first palette index of the closest match to the desired color.</summary>
+		/// <param name="red">The R component of the desired color.</param>
+		/// <param name="green">The R component of the desired color.</param>
+		/// <param name="blue">The R component of the desired color.</param>
+		/// <param name="colors">The Color array being used.</param>
+		/// <returns>The index of the color closest to search parameters.</returns>
 		public static byte PaletteIndex(byte red, byte green, byte blue, Color[] colors)
 		{
 			return PaletteIndex(Color.FromArgb(red, green, blue), colors);
 		}
-		/// <summary>Gets the first palette index of the closest match to the desired color</summary>
-		/// <remarks>Primary overload, uses Sum of Squares method to locate matches</remarks>
-		/// <param name="color">The desired color</param>
-		/// <param name="colors">The Color array being used</param>
-		/// <returns>The index of the color closest to search parameters</returns>
+		/// <summary>Gets the first palette index of the closest match to the desired color.</summary>
+		/// <remarks>Primary overload, uses Sum of Squares method to locate matches.</remarks>
+		/// <param name="color">The desired color.</param>
+		/// <param name="colors">The Color array being used.</param>
+		/// <returns>The index of the color closest to search parameters.</returns>
 		public static byte PaletteIndex(Color color, Color[] colors)
 		{
 			int diff = 9999;
@@ -81,11 +83,11 @@ namespace Idmr.Common
 		#endregion PaletteIndex
 
 		#region ConvertTo8bpp
-		/// <summary>Converts a Bitmap to PixelFormat.Format8bppIndexed using the given palette</summary>
-		/// <remarks>Primary overload</remarks>
-		/// <param name="image">The image to be converted</param>
-		/// <param name="palette">The palette to be used</param>
-		/// <returns>A Bitmap with PixelFormat.Format8bppIndexer</returns>
+		/// <summary>Converts a Bitmap to PixelFormat.Format8bppIndexed using the given palette.</summary>
+		/// <remarks>Primary overload.</remarks>
+		/// <param name="image">The image to be converted.</param>
+		/// <param name="palette">The palette to be used.</param>
+		/// <returns>A Bitmap with PixelFormat.Format8bppIndexer.</returns>
 		public static Bitmap ConvertTo8bpp(Bitmap image, ColorPalette palette)
 		{
 			image = new Bitmap(image);	// convert to 32bppRGB
@@ -104,11 +106,11 @@ namespace Idmr.Common
 			new8bit.Palette = palette;
 			return new8bit;
 		}
-		/// <summary>Converts a Bitmap to PixelFormat.Format8bppIndexed using the given colors</summary>
-		/// <param name="image">The image to be converted</param>
-		/// <param name="colors">The array of Colors to be used</param>
-		/// <returns>A Bitmap with PixelFormat.Format8bppIndexer</returns>
-		/// <remarks>If <i>colors</i> is <b>null</b>, converts using the default 256-color palette</remarks>
+		/// <summary>Converts a Bitmap to PixelFormat.Format8bppIndexed using the given colors.</summary>
+		/// <param name="image">The image to be converted.</param>
+		/// <param name="colors">The array of Colors to be used.</param>
+		/// <returns>A Bitmap with PixelFormat.Format8bppIndexer.</returns>
+		/// <remarks>If <i>colors</i> is <b>null</b>, converts using the default 256-color palette.</remarks>
 		public static Bitmap ConvertTo8bpp(Bitmap image, Color[] colors)
 		{
 			ColorPalette pal = new Bitmap(1, 1, PixelFormat.Format8bppIndexed).Palette;
@@ -118,18 +120,18 @@ namespace Idmr.Common
 		#endregion
 
 		#region ConvertTo1bpp
-		/// <summary>Converts a Bitmap to PixelFormat.Format1bppIndexed using black (#000) as transparent</summary>
-		/// <param name="image">The image to be converted</param>
-		/// <returns>A Bitmap with PixelFormat.Format1bppIndexed</returns>
+		/// <summary>Converts a Bitmap to PixelFormat.Format1bppIndexed using black (#000) as transparent.</summary>
+		/// <param name="image">The image to be converted.</param>
+		/// <returns>A Bitmap with PixelFormat.Format1bppIndexed.</returns>
 		public static Bitmap ConvertTo1bpp(Bitmap image)
 		{
 			return ConvertTo1bpp(image, Color.FromArgb(0,0,0));
 		}
-		/// <summary>Converts a Bitmap to PixelFormat.Format1bppIndexed</summary>
-		/// <remarks>Primary overload</remarks>
-		/// <param name="image">The image to be converted</param>
-		/// <param name="transparent">The color to be used for transparency</param>
-		/// <returns>A Bitmap with PixelFormat.Format1bppIndexed</returns>
+		/// <summary>Converts a Bitmap to PixelFormat.Format1bppIndexed.</summary>
+		/// <remarks>Primary overload.</remarks>
+		/// <param name="image">The image to be converted.</param>
+		/// <param name="transparent">The color to be used for transparency.</param>
+		/// <returns>A Bitmap with PixelFormat.Format1bppIndexed.</returns>
 		public static Bitmap ConvertTo1bpp(Bitmap image, Color transparent)
 		{
 			image = new Bitmap(image);	// convert to 32bppRGB
@@ -149,22 +151,22 @@ namespace Idmr.Common
 		}
 		#endregion
 
-		/// <summary>Gets the raw byte data from an image</summary>
-		/// <remarks>Wrapper for the appropriate <see cref="System.Runtime.InteropServices.Marshal.Copy(IntPtr, byte[], int, int)">Marshal.Copy</see> overload. <i>bytes</i> and <i>imageData</i> must be sized for the same image type and dimensions</remarks>
-		/// <param name="imageData">The BitmapData object for the image</param>
-		/// <param name="bytes">The byte array to be used for the pixel data</param>
-		/// <exception cref="System.ArgumentException"><i>bytes</i> is not the correct length for <i>imageData</i></exception>
+		/// <summary>Gets the raw byte data from an image.</summary>
+		/// <remarks>Wrapper for the appropriate <see cref="System.Runtime.InteropServices.Marshal.Copy(IntPtr, byte[], int, int)">Marshal.Copy</see> overload. <i>bytes</i> and <i>imageData</i> must be sized for the same image type and dimensions.</remarks>
+		/// <param name="imageData">The BitmapData object for the image.</param>
+		/// <param name="bytes">The byte array to be used for the pixel data.</param>
+		/// <exception cref="System.ArgumentException"><i>bytes</i> is not the correct length for <i>imageData</i>.</exception>
 		public static void CopyImageToBytes(BitmapData imageData, byte[] bytes)
 		{
 			if (bytes.Length != imageData.Stride * imageData.Height) throw new ArgumentException("Pixel array size does not match image type", "bytes");
 			System.Runtime.InteropServices.Marshal.Copy(imageData.Scan0, bytes, 0, bytes.Length);
 		}
 
-		/// <summary>Overwrite the image with raw byte data</summary>
-		/// <remarks>Wrapper for the appropriate <see cref="System.Runtime.InteropServices.Marshal.Copy(byte[], int, IntPtr, int)">Marshal.Copy</see> overload. <i>bytes</i> and <i>imageData</i> must be sized for the same image type and dimensions</remarks>
-		/// <param name="imageData">The BitmapData object for the image</param>
-		/// <param name="bytes">The byte array to be used for the pixel data</param>
-		/// <exception cref="System.ArgumentException"><i>bytes</i> is not the correct length for <i>imageData</i></exception>
+		/// <summary>Overwrite the image with raw byte data.</summary>
+		/// <remarks>Wrapper for the appropriate <see cref="System.Runtime.InteropServices.Marshal.Copy(byte[], int, IntPtr, int)">Marshal.Copy</see> overload. <i>bytes</i> and <i>imageData</i> must be sized for the same image type and dimensions.</remarks>
+		/// <param name="imageData">The BitmapData object for the image.</param>
+		/// <param name="bytes">The byte array to be used for the pixel data.</param>
+		/// <exception cref="System.ArgumentException"><i>bytes</i> is not the correct length for <i>imageData</i>.</exception>
 		public static void CopyBytesToImage(byte[] bytes, BitmapData imageData)
 		{
 			if (bytes.Length != imageData.Stride * imageData.Height) throw new ArgumentException("Image type does not match pixel array size", "imageData");
@@ -172,31 +174,31 @@ namespace Idmr.Common
 		}
 
 		#region GetBitmapData
-		/// <summary>Gets the BitmapData object for the given image</summary>
-		/// <remarks>Wrapper for the appropriate <see cref="System.Drawing.Bitmap.LockBits(Rectangle, ImageLockMode, PixelFormat)">Bitmap.LockBits</see> overload</remarks>
-		/// <param name="image">The image</param>
-		/// <returns>The BitmapData object using the PixelFormat of <i>image</i></returns>
+		/// <summary>Gets the BitmapData object for the given image.</summary>
+		/// <remarks>Wrapper for the appropriate <see cref="System.Drawing.Bitmap.LockBits(Rectangle, ImageLockMode, PixelFormat)">Bitmap.LockBits</see> overload.</remarks>
+		/// <param name="image">The image.</param>
+		/// <returns>The BitmapData object using the PixelFormat of <i>image</i>.</returns>
 		public static BitmapData GetBitmapData(Bitmap image)
 		{
 			return image.LockBits(new Rectangle(new Point(), image.Size), ImageLockMode.ReadWrite, image.PixelFormat);
 		}
 
-		/// <summary>Gets the BitmapData object for the given image with the specified PixelFormat</summary>
-		/// <remarks>Wrapper for the appropriate <see cref="System.Drawing.Bitmap.LockBits(Rectangle, ImageLockMode, PixelFormat)">Bitmap.LockBits</see> overload</remarks>
-		/// <param name="image">The image</param>
-		/// <param name="pixelFormat">The desired PixelFormat</param>
-		/// <returns>The BitmapDataobject using the given PixelFormat</returns>
+		/// <summary>Gets the BitmapData object for the given image with the specified PixelFormat.</summary>
+		/// <remarks>Wrapper for the appropriate <see cref="System.Drawing.Bitmap.LockBits(Rectangle, ImageLockMode, PixelFormat)">Bitmap.LockBits</see> overload.</remarks>
+		/// <param name="image">The image.</param>
+		/// <param name="pixelFormat">The desired PixelFormat.</param>
+		/// <returns>The BitmapDataobject using the given PixelFormat.</returns>
 		public static BitmapData GetBitmapData(Bitmap image, PixelFormat pixelFormat)
 		{
 			return image.LockBits(new Rectangle(new Point(), image.Size), ImageLockMode.ReadWrite, pixelFormat);
 		}
 		#endregion
 
-		/// <summary>Gets the array of Colors used in an 8bppIndexed image</summary>
-		/// <param name="image">The image to parse, will be modified</param>
-		/// <exception cref="System.ArgumentException"><i>image</i> is not 8bppIndexed</exception>
-		/// <remarks><i>image</i> is parsed and all color indexes that are not used are removed. <i>image</i> is updated</remarks>
-		/// <returns>An array of Colors reduced to only entries that are used in <i>image</i></returns>
+		/// <summary>Gets the array of Colors used in an 8bppIndexed image.</summary>
+		/// <param name="image">The image to parse, will be modified.</param>
+		/// <exception cref="System.ArgumentException"><i>image</i> is not 8bppIndexed.</exception>
+		/// <remarks><i>image</i> is parsed and all color indexes that are not used are removed. <i>image</i> is updated.</remarks>
+		/// <returns>An array of Colors reduced to only entries that are used in <i>image</i>.</returns>
 		public static Color[] GetTrimmedColors(Bitmap image)
 		{
 			if (image.PixelFormat != PixelFormat.Format8bppIndexed) throw new ArgumentException("image must be 8bppIndexed", "image");

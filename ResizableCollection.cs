@@ -1,17 +1,19 @@
 ﻿/*
  * Idmr.Common.dll, Library file with common IDMR resources
- * Copyright (C) 2007-2012 Michael Gaisser (mjgaisser@gmail.com)
- * Licensed under the GPL v3.0 or later
+ * Copyright (C) 2007-2014 Michael Gaisser (mjgaisser@gmail.com)
+ * Licensed under the MPL v2.0 or later
  * 
  * Full notice in help/Idmr.Common.chm
- * Version: 1.2
+ * Version: 1.3
  */
 
 /* CHANGELOG
- * v1.3, XXXXXX
- * [NEW] Capacity, abstract SetCount(int, bool), abstract Clear()
+ * v1.3, 141214
+ * [NEW] Serializable
+ * [NEW] Capacity, abstract SetCount(int, bool), virtual Clear()
  * [NEW] IsModified implementation
  * [UPD] Add() and Insert() now virtual
+ * [UPD] switch to MPL
  * v1.2, 121024
  * [UPD] ItemLimit value of -1 for unlimited size
  * [UPD] null check in _add
@@ -21,13 +23,14 @@
  * v1.0, XXXXXX
  * - Release
  */
- 
+
 using System;
 
 namespace Idmr.Common
 {
 	/// <summary>Collection class for variable-sized arrays</summary>
 	/// <typeparam name="T">Class type to be used in the collection</typeparam>
+    [Serializable]
 	public abstract class ResizableCollection<T> : FixedSizeCollection<T> where T : class
 	{
 		/// <summary>Maximum number of permitted elements</summary>
@@ -42,6 +45,10 @@ namespace Idmr.Common
 		/// <remarks>This is primarily for use when <see cref="ItemLimit"/> is set <b>-1</b> (unlimited).</remarks>
 		public int Capacity { get { return _items.Capacity; } }
 
+		/// <summary>When defined in a child class, is intended to populate/truncate the Collection as necessary.</summary>
+		/// <param name="value">The new size of the Collection</param>
+		/// <param name="allowTruncate">Controls if the Collection is allowed to get smaller</param>
+		/// <remarks>As every implementation is different, there is no default implementation and must be customized for every derivation.</remarks>
 		abstract public void SetCount(int value, bool allowTruncate);
 
 		/// <summary>Empties the Collection of entries</summary>
