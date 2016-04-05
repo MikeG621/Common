@@ -1,13 +1,15 @@
 /*
  * Idmr.Common.dll, Library file with common IDMR resources
- * Copyright (C) 2007-2014 Michael Gaisser (mjgaisser@gmail.com)
+ * Copyright (C) 2007-2016 Michael Gaisser (mjgaisser@gmail.com)
  * Licensed under the MPL v2.0 or later
  * 
  * Full notice in help/Idmr.Common.chm
- * Version: 1.3
+ * Version: 1.3.1
  */
 
 /* CHANGE LOG
+ * v1.3.1, 
+ * [FIX] Fixed ConvertTo1bpp's implementation of transparent; counted transparent as solid if non-zero alpha
  * v1.3, 141214
  * [UPD] switch to MPL
  * v1.2, 121024
@@ -143,7 +145,7 @@ namespace Idmr.Common
 			byte[] pix1 = new byte[bd1.Stride * bd1.Height];
 			for (int y = 0; y < image.Height; y++)
 				for (int x = 0, pos32 = y*bd32.Stride, pos1 = y*bd1.Stride; x < image.Width; x++)
-					if (pix32[pos32+x*4] != transparent.B || pix32[pos32+x*4+1] != transparent.G || pix32[pos32+x*4+2] != transparent.R || pix32[pos32+x*4+3] != 0) pix1[pos1+x/8] |= (byte)(0x80 >> (x&7));
+					if ((pix32[pos32+x*4] != transparent.B || pix32[pos32+x*4+1] != transparent.G || pix32[pos32+x*4+2] != transparent.R) && pix32[pos32+x*4+3] != 0) pix1[pos1+x/8] |= (byte)(0x80 >> (x&7));
 			CopyBytesToImage(pix1, bd1);	// Bytes to 1bppImage
 			image.UnlockBits(bd32);
 			new1bit.UnlockBits(bd1);
