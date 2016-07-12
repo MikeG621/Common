@@ -8,7 +8,7 @@
  */
 
 /* CHANGE LOG
- * v1.3.1, 
+ * v1.3.1, 160712
  * [FIX] Fixed ConvertTo1bpp's implementation of transparent; counted transparent as solid if non-zero alpha
  * v1.3, 141214
  * [UPD] switch to MPL
