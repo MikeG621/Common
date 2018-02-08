@@ -63,7 +63,7 @@ namespace Idmr.Common
 			set { _setItem(index, value); }
 		}
 
-		/// <summary>Gets the number of objects in the collectio.n</summary>
+		/// <summary>Gets the number of objects in the collection.</summary>
 		/// <remarks>If internal List is <b>null</b>, returns <b>-1</b>.</remarks>
 		public int Count { get { return (_items == null ? -1 : _items.Count); } }
 		
